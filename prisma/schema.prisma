@@ -1,0 +1,92 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model User {
+  id            String      @id @default(cuid())
+  name          String?
+  email         String?     @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+  interview     Interview[]
+}
+
+enum InterviewType {
+  SINGLE_SELECTION
+  FILL_IN
+  TRUE_FALSE
+  SINGLE_SELECTION_DROPDOWN
+  MULTI_SELECTION
+}
+
+model Interview {
+  id            String        @id @default(cuid())
+  userId        String
+  questions     Question[]
+  timeStarted   DateTime
+  topic         String
+  timeEnded     DateTime?
+  interviewType InterviewType
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model topic_count {
+  id    String @id @default(cuid())
+  topic String @unique
+  count Int
+}
+
+model Question {
+  id                String        @id @default(cuid())
+  question          String
+  answer            String
+  interviewId       String
+  options           Json? // for SINGLE_SELECTION questions
+  percentageCorrect Float? // for FILL_IN questions
+  isCorrect         Boolean? // for SINGLE_SELECTION questions
+  questionType      InterviewType
+  userAnswer        String?
+
+  interview Interview @relation(fields: [interviewId], references: [id])
+
+  @@index([interviewId])
+}
