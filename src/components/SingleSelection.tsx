@@ -15,7 +15,7 @@ import {
   CardHeader,
   CardTitle
 } from '@/components/ui/card';
-import { cn, formatTimeDelta } from '@/lib/utils';
+import { formatTimeDelta } from '@/lib/utils';
 import { checkAnswerSchema, endInterviewSchema } from '@/schemas/questions';
 
 import SingleSelectionCounter from './SingleSelectionCounter';

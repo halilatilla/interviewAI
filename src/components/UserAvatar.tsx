@@ -6,8 +6,6 @@ import { type User } from 'next-auth';
 
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 
-
-
 interface Props extends AvatarProps {
   user: Pick<User, 'name' | 'image'>;
 }
