@@ -1,25 +1,17 @@
+'use client';
+
 import HistoryComponent from '@/components/history/HistoryComponent';
-import { prisma } from '@/lib/db';
-import { getAuthSession } from '@/lib/nextauth';
+import { useGetAllInterviews } from '@/hooks/queries';
 
-const History = async () => {
-  const session = await getAuthSession();
+const History = () => {
+  const { interviews, isLoading } = useGetAllInterviews();
 
-  if (!session?.user) return null;
-
-  const interviews = await prisma.interview.findMany({
-    take: 100,
-    where: {
-      userId: session?.user?.id
-    },
-    orderBy: {
-      timeStarted: 'desc'
-    }
-  });
+  if (isLoading) return <p>Loading...</p>;
+  if (!interviews) return <p>No interviews</p>;
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      {interviews.map(interview => (
+      {interviews?.map(interview => (
         <HistoryComponent key={interview.id} interview={interview} />
       ))}
     </div>

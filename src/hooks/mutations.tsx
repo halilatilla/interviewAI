@@ -1,13 +1,11 @@
-import { useRouter } from 'next/navigation';
-
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios, { AxiosError } from 'axios';
 
 import { useToast } from '@/components/ui/use-toast';
 
 export const useDeleteInterview = () => {
   const { toast } = useToast();
-  const router = useRouter();
+  const queryClient = useQueryClient();
 
   const { mutate: deleteInterviewMutation } = useMutation(
     async (id: string) => {
@@ -21,7 +19,7 @@ export const useDeleteInterview = () => {
           description: 'Your interview has been deleted.',
           variant: 'success'
         });
-        router.refresh();
+        queryClient.invalidateQueries({ queryKey: ['getAllInterviews'] });
       },
       onError: error => {
         if (error instanceof AxiosError) {

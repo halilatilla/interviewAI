@@ -134,6 +134,7 @@ export async function GET(req: Request) {
         questions: true
       }
     });
+
     if (!interview) {
       return NextResponse.json(
         { error: 'interview not found.' },
@@ -146,7 +147,7 @@ export async function GET(req: Request) {
     return NextResponse.json(
       { interview },
       {
-        status: 400
+        status: 200
       }
     );
   } catch (error) {
