@@ -86,7 +86,7 @@ model Question {
   questionType      InterviewType
   userAnswer        String?
 
-  interview Interview @relation(fields: [interviewId], references: [id])
+  interview Interview @relation(fields: [interviewId], references: [id], onDelete: Cascade)
 
   @@index([interviewId])
 }

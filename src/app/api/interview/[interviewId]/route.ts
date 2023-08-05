@@ -41,16 +41,17 @@ export async function DELETE(
         }
       );
     }
-    await prisma.interview.delete({
+    const deletedInterview = await prisma.interview.delete({
       where: {
-        id: interviewId
+        id: interviewId,
+        userId: session.user.id
       }
     });
 
     return NextResponse.json(
-      { interview },
+      { message: 'interview deleted successfully.', deletedInterview },
       {
-        status: 400
+        status: 200
       }
     );
   } catch (error) {
