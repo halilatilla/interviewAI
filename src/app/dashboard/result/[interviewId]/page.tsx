@@ -25,7 +25,7 @@ const Statistics = async ({ params: { interviewId } }: Props) => {
   let accuracy: number = 0;
 
   if (interview?.interviewType === 'SINGLE_SELECTION') {
-    let totalCorrect = interview.questions.reduce((acc, question) => {
+    const totalCorrect = interview.questions.reduce((acc, question) => {
       if (question.isCorrect) {
         return acc + 1;
       }

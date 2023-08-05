@@ -8,13 +8,9 @@ import {
   DialogTitle,
   DialogTrigger
 } from '@/components/ui/dialog';
+import { useDeleteInterview } from '@/hooks/mutations';
 
-interface IModalDeleteInterview {
-  open: boolean;
-  setOpen: (open: boolean) => void;
-  interviewId: string;
-  interviewTopic: string;
-}
+import { IModalDeleteInterview } from './types';
 
 export function ModalDeleteInterview({
   open,
@@ -22,12 +18,16 @@ export function ModalDeleteInterview({
   interviewId,
   interviewTopic
 }: IModalDeleteInterview) {
-  const onDeleteInterview = async () => {
-    await fetch(`/api/interview/${interviewId}`, {
-      method: 'DELETE'
-    });
+  const deleteInterviewMutation = useDeleteInterview();
 
-    setOpen(false);
+  const onDeleteInterview = () => {
+    try {
+      deleteInterviewMutation(interviewId);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setOpen(false);
+    }
   };
 
   return (

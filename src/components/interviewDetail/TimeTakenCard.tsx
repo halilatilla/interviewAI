@@ -6,7 +6,6 @@ import { Hourglass } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { formatTimeDelta } from '@/lib/utils';
 
-
 type Props = {
   timeEnded: Date;
   timeStarted: Date;
