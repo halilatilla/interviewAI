@@ -7,7 +7,11 @@ export const useDeleteInterview = () => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  const { mutate: deleteInterviewMutation } = useMutation(
+  const {
+    mutate: deleteInterviewMutation,
+    isLoading,
+    isSuccess
+  } = useMutation(
     async (id: string) => {
       const response = await axios.delete(`/api/interview/${id}`);
       return response.data;
@@ -35,5 +39,5 @@ export const useDeleteInterview = () => {
     }
   );
 
-  return deleteInterviewMutation;
+  return { deleteInterviewMutation, isLoading, isSuccess };
 };

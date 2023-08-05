@@ -1,3 +1,5 @@
+import { Loader2 } from 'lucide-react';
+
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -18,15 +20,16 @@ export function ModalDeleteInterview({
   interviewId,
   interviewTopic
 }: IModalDeleteInterview) {
-  const deleteInterviewMutation = useDeleteInterview();
+  const { deleteInterviewMutation, isLoading, isSuccess } =
+    useDeleteInterview();
 
-  const onDeleteInterview = () => {
+  const onDeleteInterview = async () => {
     try {
       deleteInterviewMutation(interviewId);
     } catch (error) {
       console.error(error);
     } finally {
-      setOpen(false);
+      isSuccess && setOpen(false);
     }
   };
 
@@ -44,9 +47,22 @@ export function ModalDeleteInterview({
         </DialogHeader>
 
         <DialogFooter>
-          <Button onClick={() => setOpen(false)}>Cancel</Button>
-          <Button variant="outline" onClick={onDeleteInterview}>
-            Delete
+          <Button onClick={() => setOpen(false)} disabled={isLoading}>
+            Cancel
+          </Button>
+          <Button
+            variant="outline"
+            onClick={onDeleteInterview}
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Please wait
+              </>
+            ) : (
+              'Delete'
+            )}
           </Button>
         </DialogFooter>
       </DialogContent>
